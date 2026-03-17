@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#a33f2f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="shurong" />
+    <title>shurong</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-512.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Daily Chinese SRS</p>
+          <h1>shurong</h1>
+          <p class="hero-text">
+            Anki 감각으로 중국어를 하루 10개씩 반복 학습하는 아이폰용 웹 앱입니다.
+          </p>
+        </div>
+        <div class="hero-note">
+          <strong>핵심 흐름</strong>
+          <span>오늘 새 단어 10개 + 복습 카드</span>
+          <span>답을 본 뒤 난이도를 눌러 다음 복습 시점을 조절</span>
+        </div>
+      </header>
+
+      <section class="stats-grid" aria-label="학습 통계">
+        <article class="stat-card stat-warm">
+          <span class="stat-label">오늘 새 카드</span>
+          <strong id="newCountValue" class="stat-value">0 / 10</strong>
+          <span id="newCountNote" class="stat-note">오늘 배정된 단어</span>
+        </article>
+        <article class="stat-card stat-ink">
+          <span class="stat-label">현재 대기</span>
+          <strong id="queueCountValue" class="stat-value">0</strong>
+          <span class="stat-note">지금 바로 풀 수 있는 카드</span>
+        </article>
+        <article class="stat-card stat-sand">
+          <span class="stat-label">연속 학습</span>
+          <strong id="streakValue" class="stat-value">0일</strong>
+          <span id="streakNote" class="stat-note">오늘 한 번이라도 학습하면 유지</span>
+        </article>
+        <article class="stat-card stat-mint">
+          <span class="stat-label">익힌 카드</span>
+          <strong id="masteredValue" class="stat-value">0</strong>
+          <span id="masteredNote" class="stat-note">복습 단계에 진입한 카드</span>
+        </article>
+      </section>
+
+      <main class="workspace">
+        <section class="study-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Study</p>
+              <h2>오늘의 카드</h2>
+            </div>
+            <p id="sessionSummary" class="session-summary"></p>
+          </div>
+
+          <article id="studyCard" class="flash-card" aria-live="polite">
+            <div class="card-topline">
+              <span id="cardStage" class="badge">새 카드</span>
+              <span id="cardCategory" class="badge badge-outline">기초</span>
+            </div>
+            <div class="card-front">
+              <p id="cardPrompt" class="card-prompt">
+                먼저 뜻을 떠올려보고, 준비되면 답을 확인하세요.
+              </p>
+              <h3 id="cardHanzi" class="card-hanzi">你好</h3>
+              <p id="cardPinyinFront" class="card-pinyin card-pinyin-front"></p>
+            </div>
+
+            <div id="cardAnswer" class="card-answer" hidden>
+              <p id="cardPinyinBack" class="card-pinyin"></p>
+              <p id="cardMeaning" class="card-meaning"></p>
+              <p id="cardHint" class="card-hint"></p>
+            </div>
+
+            <div class="card-actions">
+              <button id="revealButton" class="primary-button" type="button">
+                답 보기
+              </button>
+
+              <div id="gradeButtons" class="grade-grid" hidden>
+                <button class="grade-button again" data-grade="again" type="button">
+                  <span>다시</span>
+                  <small>곧 다시 보기</small>
+                </button>
+                <button class="grade-button hard" data-grade="hard" type="button">
+                  <span>어려움</span>
+                  <small>조금 뒤에 다시</small>
+                </button>
+                <button class="grade-button good" data-grade="good" type="button">
+                  <span>좋음</span>
+                  <small>기본 간격</small>
+                </button>
+                <button class="grade-button easy" data-grade="easy" type="button">
+                  <span>쉬움</span>
+                  <small>더 멀리 보내기</small>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article id="emptyState" class="empty-state" hidden>
+            <p class="empty-kicker">All clear</p>
+            <h3>오늘 예정된 카드를 모두 끝냈습니다.</h3>
+            <p id="emptyStateText">
+              내일 새 카드 10개가 자동으로 배정되고, 복습 카드도 다시 나타납니다.
+            </p>
+          </article>
+        </section>
+
+        <aside class="side-panel">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="panel-kicker">Today</p>
+                <h2>오늘 새 단어</h2>
+              </div>
+            </div>
+            <ul id="todayWordList" class="word-list"></ul>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="panel-kicker">Settings</p>
+                <h2>학습 설정</h2>
+              </div>
+            </div>
+            <form id="settingsForm" class="settings-form">
+              <label class="field">
+                <span>하루 새 카드 수</span>
+                <input
+                  id="dailyLimitInput"
+                  type="number"
+                  min="1"
+                  max="20"
+                  inputmode="numeric"
+                />
+              </label>
+              <label class="toggle">
+                <input id="showPinyinInput" type="checkbox" />
+                <span>앞면에 병음도 같이 보기</span>
+              </label>
+              <div class="button-row">
+                <button class="secondary-button" type="submit">설정 저장</button>
+                <button id="resetProgressButton" class="ghost-button" type="button">
+                  진행도 초기화
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="panel-kicker">Deck</p>
+                <h2>내 단어 추가</h2>
+              </div>
+            </div>
+            <p class="inline-note">
+              한 줄에 하나씩 <code>한자|병음|뜻|카테고리</code> 형식으로 붙여 넣으세요.
+            </p>
+            <textarea
+              id="importInput"
+              class="import-area"
+              placeholder="例子&#10;朋友|péngyou|친구|사람&#10;机场|jīchǎng|공항|장소"
+            ></textarea>
+            <div class="button-row">
+              <button id="importButton" class="secondary-button" type="button">
+                단어 추가
+              </button>
+            </div>
+            <p id="importStatus" class="inline-note status-line"></p>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
+
+

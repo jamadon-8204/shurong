@@ -1,0 +1,35 @@
+﻿services:
+  - type: web
+    name: shurong
+    runtime: static
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: mkdir -p dist && cp index.html styles.css manifest.webmanifest sw.js dist && cp -R js icons dist
+    staticPublishPath: ./dist
+    headers:
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /js/*
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /icons/*
+        name: Cache-Control
+        value: public, max-age=604800
+      - path: /styles.css
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+

@@ -1,0 +1,27 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b34b39" />
+      <stop offset="100%" stop-color="#742619" />
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff8f0" />
+      <stop offset="100%" stop-color="#f0dfc8" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#bg)" />
+  <circle cx="408" cy="118" r="72" fill="#dcb98c" opacity="0.22" />
+  <rect x="96" y="104" width="320" height="304" rx="44" fill="url(#card)" />
+  <rect x="116" y="124" width="320" height="304" rx="44" fill="none" stroke="#4b2a16" stroke-opacity="0.12" />
+  <text
+    x="256"
+    y="278"
+    text-anchor="middle"
+    font-family="PingFang SC, Hiragino Sans GB, Songti SC, serif"
+    font-size="190"
+    fill="#742619"
+  >
+    汉
+  </text>
+  <rect x="164" y="334" width="184" height="18" rx="9" fill="#b34b39" opacity="0.22" />
+</svg>
